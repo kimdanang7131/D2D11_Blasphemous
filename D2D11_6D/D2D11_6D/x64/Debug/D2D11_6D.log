@@ -1,0 +1,7 @@
+﻿  WinApi.cpp
+C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\D2D11_6D\WinApi.cpp(23,36): error C2440: '=': 'const char [7]'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\D2D11_6D\WinApi.cpp(23,28): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\D2D11_6D\WinApi.cpp(31,30): error C2440: '=': 'const char [7]'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\D2D11_6D\WinApi.cpp(31,22): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\D2D11_6D\WinApi.cpp(32,27): error C2440: '=': 'const char [5]'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
+C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\D2D11_6D\WinApi.cpp(32,21): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.

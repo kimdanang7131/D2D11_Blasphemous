@@ -76,16 +76,16 @@ namespace Pipeline
 			}
 
 			{
-				float Coordinates[4][2] =
-				{
-					{ -0.5f , 0.5f },
-					{  0.5f , 0.5f },
-					{  0.5f ,-0.5f },
-					{ -0.5f ,-0.5f }, // 좌표계 반시계 안그려줌
-				};
+				//float Coordinates[4][2] =
+				//{
+				//	{ -0.5f , 0.5f },
+				//	{  0.5f , 0.5f },
+				//	{  0.5f ,-0.5f },
+				//	{ -0.5f ,-0.5f }, // 좌표계 반시계 안그려줌
+				//};
 			
 
-				Device->CreateBuffer(nullptr ,nullptr ,&Buffer::Vertex);
+				//Device->CreateBuffer(nullptr ,nullptr ,&Buffer::Vertex);
 
 			}
 			return 0;
