@@ -16,7 +16,7 @@ int APIENTRY WinMain(_In_ HINSTANCE const hInstance, _In_opt_  HINSTANCE const p
 		wndClass.cbSize = sizeof(WNDCLASSEX); // cb == count of bytes , WNDCLASSEX의 바이트수 받음
 		wndClass.lpfnWndProc = Pipeline::Procedure;     // 메세지 처리 함수 (윈도우 프로시저에서 처리)
 		wndClass.hInstance = hInstance;       // HINSTANCE(ID값 정수 받아오기)
-		wndClass.hIcon   = LoadIcon(NULL, IDI_APPLICATION);   // 윈도우 창 왼쪽위 아이콘  -> 사용자가 만든 아이콘이면 NULL 을 지우고 hInstance 
+		wndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);   // 윈도우 창 왼쪽위 아이콘  -> 사용자가 만든 아이콘이면 NULL 을 지우고 hInstance 
 		wndClass.hIconSm = LoadIcon(NULL, IDI_APPLICATION); // 작업표시줄 쪽 아이콘	      -> 사용자가 만든 아이콘이면 NULL 을 지우고 hInstance
 		wndClass.hCursor = LoadCursor(NULL, IDC_ARROW);     // 커서 아이콘 설정	          -> 사용자가 만든 아이콘이면 NULL 을 지우고 hInstance
 		wndClass.hbrBackground = static_cast<HBRUSH>(GetStockObject(WHITE_BRUSH)); // Stock == 재고품,저장품  , GetStockObject == Stock Object의 핸들값을 얻을 때 사용 
@@ -74,7 +74,7 @@ int APIENTRY WinMain(_In_ HINSTANCE const hInstance, _In_opt_  HINSTANCE const p
 		if (PeekMessage(&msg, HWND(), WM_NULL, WM_NULL, PM_REMOVE)) // PEEK == 몰래엿보다,  PEEKMESSAGE는 메세지 큐에서 메세지를 꺼내거나 검사하되 메세지가 없더라도 즉각 리턴한다. 반환형 BOOL
 		{
 			if (msg.message == WM_QUIT) // WM_QUIT == 프로그램이 끝날때 발생하는 메시지
-				return static_cast<int>(msg.wParam); 
+				return static_cast<int>(msg.wParam);
 
 			DispatchMessage(&msg); // 이 함수에 의해 메세지 처리함수( 윈도우 프로시저 )에 전달됨
 		}

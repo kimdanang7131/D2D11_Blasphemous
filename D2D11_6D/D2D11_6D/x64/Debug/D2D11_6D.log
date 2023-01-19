@@ -1,7 +1,4 @@
 ﻿  WinApi.cpp
-C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\D2D11_6D\WinApi.cpp(23,36): error C2440: '=': 'const char [7]'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
-C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\D2D11_6D\WinApi.cpp(23,28): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
-C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\D2D11_6D\WinApi.cpp(31,30): error C2440: '=': 'const char [7]'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
-C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\D2D11_6D\WinApi.cpp(31,22): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
-C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\D2D11_6D\WinApi.cpp(32,27): error C2440: '=': 'const char [5]'에서 'LPCWSTR'(으)로 변환할 수 없습니다.
-C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\D2D11_6D\WinApi.cpp(32,21): message : 가리킨 형식이 관련이 없습니다. 변환하려면 reinterpret_cast, C 스타일 캐스트 또는 함수 스타일 캐스트가 필요합니다.
+Pipeline.obj : error LNK2019: D3D11CreateDeviceAndSwapChain"__int64 __cdecl Pipeline::Procedure(struct HWND__ * const,unsigned int,unsigned __int64,__int64)" (?Procedure@Pipeline@@YA_JQEAUHWND__@@I_K_J@Z) 함수에서 참조되는 확인할 수 없는 외부 기호
+MSVCRTD.lib(exe_main.obj) : error LNK2019: main"int __cdecl invoke_main(void)" (?invoke_main@@YAHXZ) 함수에서 참조되는 확인할 수 없는 외부 기호
+C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\x64\Debug\D2D11_6D.exe : fatal error LNK1120: 2개의 확인할 수 없는 외부 참조입니다.

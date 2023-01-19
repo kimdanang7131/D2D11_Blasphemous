@@ -1,6 +1,6 @@
 #include <d3d11.h>
 #include <cassert> // 런타임 도중에 에러를 검출하여 프로그램 폭파시키는 라이브러리
-//#pragma comment(lib, "d3d11.lib") // USB느낌 너무 무거워서 .lib로 놓음 ( 누구나 접근하면 안되기도 하고) -> 속성 -> 링커 -> 모든옵션 -> 추가종속성 -> d3d11.lib; 하거나 이거 
+//#pragma comment(lib, "d3d11.lib") // USB느낌 너무 무거워서 .lib로 놓음 ( 누구나 접근하면 안되기도 하고) -> 속성 -> 링커 -> 모든옵션 -> 추가종속성 -> d3d11.lib; 하거나 이거
 														// 헤더는 솔루션에 외부 종속성에 이미 선언되있고, cpp느낌
 #if not defined _DEBUG
 #define MUST(Expression) (      (         (Expression)))
@@ -14,8 +14,8 @@ namespace Pipeline
 	// Rendering Pipeline
 	// 화면에 그래픽이 그려지는 단계를 의미합니다. (총 11가지)
 	//  
-	// IA -> VS -> RS -> PS -> OM 
-	// 
+	// IA -> VS -> RS -> PS -> OM
+	//
 
 	namespace
 	{
@@ -25,10 +25,10 @@ namespace Pipeline
 		ID3D11RenderTargetView* RenderTargetView; // 만들어놓은 윈도우 창 위에 띄워주는 실제 게임창?인듯
 
 
-		namespace Buffer
+		/*namespace Buffer
 		{
 			ID3D11Buffer* Vertex;
-		}
+		}*/
 	}
 
 	LRESULT CALLBACK Procedure(HWND const hWindow, UINT const uMessage, WPARAM const wParameter, LPARAM const lParameter)
@@ -41,7 +41,7 @@ namespace Pipeline
 				DXGI_SWAP_CHAIN_DESC descriptor = DXGI_SWAP_CHAIN_DESC();
 
 				//Descriptor.BufferDesc.Width                   = 500;  // 버퍼를 몇개를 스왑체인할꺼나 , 그 관리할 내용은 무엇이냐
-				//Descriptor.BufferDesc.Height                  = 500;  // 버퍼에 관한 작업영역 == 그려준대로 화면에 출력 
+				//Descriptor.BufferDesc.Height                  = 500;  // 버퍼에 관한 작업영역 == 그려준대로 화면에 출력
 																	  // 버퍼사이즈는 무조건 창크기와 같아야함(작으면 그 영역만 적용됨) , 0값 들어가면 처음 설정한 사이즈로 width height 설정됨
 				//Descriptor.BufferDesc.RefreshRate.Numerator   = 0;    // RefreshRate == 갱신률 -> 분자
 				//Descriptor.BufferDesc.RefreshRate.Denominator = 0;    // 분모 -> 0으로 둘다 설정하면 자동프레임 ->분모를 1로생각함(분자를 1로하면 무한)
@@ -50,7 +50,7 @@ namespace Pipeline
 				descriptor.BufferDesc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;           // ★★★ 어떤 데이터를 관리하고, 어떻게 읽어야되는지 결정? UNSIGNED NORMALIZE = 1로정규화한다.
 				descriptor.SampleDesc.Count = 1;          // 어떻게 안티앨리어싱을 결정할거냐 슈퍼샘플링/ -> 멀티샘플링 몇개로 이용할거냐
 				//Descriptor.SampleDesc.Quality                 = 0;	        // 샘플링 질?
-				descriptor.OutputWindow = hWindow;                          // 어디에 출력할거냐 
+				descriptor.OutputWindow = hWindow;                          // 어디에 출력할거냐
 				descriptor.Windowed = true;                             // 창모드 사용할거냐
 				descriptor.BufferCount = 1;                                // 이중버퍼링 = 1 (기본적으로 버퍼가 포함되어있기 때문에)
 				descriptor.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT;  // 버퍼의 사용 용도가 무엇이냐 , 완성한 렌더 타겟을 출력하는 용도
@@ -76,25 +76,25 @@ namespace Pipeline
 			}
 
 			{
-				//float Coordinates[4][2] =
-				//{
-				//	{ -0.5f , 0.5f },
-				//	{  0.5f , 0.5f },
-				//	{  0.5f ,-0.5f },
-				//	{ -0.5f ,-0.5f }, // 좌표계 반시계 안그려줌
-				//};
-			
+				float Coordinates[4][2] =
+				{
+					{ -0.5f , 0.5f },
+					{  0.5f , 0.5f },
+					{  0.5f ,-0.5f },
+					{ -0.5f ,-0.5f }, // 좌표계 반시계 안그려줌
+				};
 
-				//Device->CreateBuffer(nullptr ,nullptr ,&Buffer::Vertex);
+
+				//Device->CreateBuffer(nullptr, nullptr, &Buffer::Vertex);
 
 			}
 			return 0;
 		}
-		case WM_SIZE: // 창의 크기가 변경될때 ,창 최대화할때 캐릭터 크기변경 이나 캐릭터 
+		case WM_SIZE: // 창의 크기가 변경될때 ,창 최대화할때 캐릭터 크기변경 이나 캐릭터
 		{
 			//렌더 타겟
 			//디바이스에서 할 수 있다.
-			// 
+			//
 			// 버퍼 관리 -> 스왑체인에서 관리하고있음
 			ID3D11Texture2D* texture = nullptr; // 텍스쳐에 있는 아이디 식별번호 외우기 힘드니 따로 만들어준듯
 			MUST(SwapChain->GetBuffer(0, IID_PPV_ARGS(&texture))); //이중버퍼중 백버퍼 먼저쓰니 0 , 텍스쳐에 있는 아이디 식별번호를 파악하여 백버퍼에서 일하게
@@ -150,5 +150,3 @@ namespace Pipeline
 		}
 	}
 }
-
-
