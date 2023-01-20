@@ -1,7 +1,7 @@
 #include <d3d11.h>
 #include <cassert> // 런타임 도중에 에러를 검출하여 프로그램 폭파시키는 라이브러리
-//#pragma comment(lib, "d3d11.lib") // USB느낌 너무 무거워서 .lib로 놓음 ( 누구나 접근하면 안되기도 하고) -> 속성 -> 링커 -> 모든옵션 -> 추가종속성 -> d3d11.lib; 하거나 이거
-														// 헤더는 솔루션에 외부 종속성에 이미 선언되있고, cpp느낌
+#pragma comment(lib, "d3d11.lib") // USB느낌 너무 무거워서 .lib로 놓음 ( 누구나 접근하면 안되기도 하고) -> 속성 -> 링커 -> 모든옵션 -> 추가종속성 -> d3d11.lib; 하거나 이거
+// 헤더는 솔루션에 외부 종속성에 이미 선언되있고, cpp느낌
 #if not defined _DEBUG
 #define MUST(Expression) (      (         (Expression)))
 #else
@@ -25,10 +25,10 @@ namespace Pipeline
 		ID3D11RenderTargetView* RenderTargetView; // 만들어놓은 윈도우 창 위에 띄워주는 실제 게임창?인듯
 
 
-		/*namespace Buffer
+		namespace Buffer
 		{
 			ID3D11Buffer* Vertex;
-		}*/
+		}
 	}
 
 	LRESULT CALLBACK Procedure(HWND const hWindow, UINT const uMessage, WPARAM const wParameter, LPARAM const lParameter)
@@ -76,16 +76,35 @@ namespace Pipeline
 			}
 
 			{
-				float Coordinates[4][2] =
+				struct Vertex
 				{
-					{ -0.5f , 0.5f },
-					{  0.5f , 0.5f },
-					{  0.5f ,-0.5f },
-					{ -0.5f ,-0.5f }, // 좌표계 반시계 안그려줌
+					float Position[4];
+					float    Color[4];
 				};
 
+				Vertex const Vertecies[4] =
+				{
+					{ { -0.5f , 0.5f, 0.0f , 1.0f }, { 1.0f , 0.0f, 0.0f , 1.0f } },
+					{ {  0.5f , 0.5f, 0.0f , 1.0f }, { 0.0f , 1.0f, 0.0f , 1.0f } },
+					{ { -0.5f ,-0.5f, 0.0f , 1.0f }, { 0.0f , 0.0f, 1.0f , 1.0f } },
+					{ {  0.5f ,-0.5f, 0.0f , 1.0f }, { 1.0f , 1.0f, 1.0f , 1.0f } }  // 좌표계 반시계 안그려줌
+				};
 
-				//Device->CreateBuffer(nullptr, nullptr, &Buffer::Vertex);
+				D3D11_BUFFER_DESC descriptor = D3D11_BUFFER_DESC();
+				descriptor.ByteWidth = sizeof(Vertecies);
+				descriptor.Usage = D3D11_USAGE_IMMUTABLE;
+				descriptor.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+				descriptor.CPUAccessFlags = 0; // USAGE의 DYNAMIC == CPU 쓰기가능 읽기X , STAGING 반대 여기서 한번더 CPU 접근맞는지 검사
+
+				D3D11_SUBRESOURCE_DATA subResource = D3D11_SUBRESOURCE_DATA();
+				subResource.pSysMem = Vertecies; // 버퍼라는 공간을 초기화할려고 만들어놓음
+
+				MUST(Device->CreateBuffer(&descriptor, &subResource, &Buffer::Vertex));
+				const UINT Stride = sizeof(Vertex);  // stride 큰걸음
+				const UINT offset = 0; // 처음시작위치?
+				DeviceContext->IASetVertexBuffers(0, 1, &Buffer::Vertex, &Stride, &offset); // set get 구분 버텍스 버퍼는 최대 32개 -> 0~31
+
+				DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 			}
 			return 0;
