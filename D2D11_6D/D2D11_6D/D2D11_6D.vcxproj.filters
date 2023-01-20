@@ -22,4 +22,10 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="HLSL\Shader\LayOut.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="HLSL\Shader\Vertex.hlsl" />
+  </ItemGroup>
 </Project>
