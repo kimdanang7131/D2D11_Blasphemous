@@ -23,9 +23,18 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="HLSL\Shader\Vertex.hlsl" />
+    <FxCompile Include="Shader\HLSL\Vertex.hlsl" />
+    <FxCompile Include="Shader\HLSL\Pixel.hlsl" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="HLSL\Shader\LayOut.hlsli" />
+    <None Include="Shader\HLSL\Layout.hlsli" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Shader\Bytecode\Pixel.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Shader\Bytecode\Vertex.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

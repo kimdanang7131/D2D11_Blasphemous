@@ -5,7 +5,14 @@
       <FullPath>C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\.out\D2D11_6D.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
-  <ContentFiles />
+  <ContentFiles>
+    <ContentFile>
+      <FullPath>C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\.out\Pixel.cso</FullPath>
+    </ContentFile>
+    <ContentFile>
+      <FullPath>C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\.out\Vertex.cso</FullPath>
+    </ContentFile>
+  </ContentFiles>
   <SatelliteDlls />
   <NonRecipeFileRefs />
 </Project>

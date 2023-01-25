@@ -19,11 +19,13 @@ namespace Pipeline
 
 	namespace
 	{
-		ID3D11Device* Device;
-		ID3D11DeviceContext* DeviceContext;
-		IDXGISwapChain* SwapChain;
-		ID3D11RenderTargetView* RenderTargetView; // 만들어놓은 윈도우 창 위에 띄워주는 실제 게임창?인듯
-
+		ID3D11Device*            Device;
+		ID3D11DeviceContext*     DeviceContext;
+		IDXGISwapChain*          SwapChain;
+		ID3D11RenderTargetView*  RenderTargetView; // 만들어놓은 윈도우 창 위에 띄워주는 실제 게임창?인듯
+		ID3D11InputLayout*       InputLayout;
+		ID3D11VertexShader*      VertexShader;
+		ID3D11PixelShader*       PixelShader;
 
 		namespace Buffer
 		{
@@ -105,8 +107,43 @@ namespace Pipeline
 				const UINT offset = 0; // 어디서부터 읽어야되나 -> 처음부터라서 0 (처음시작위치 알려주는중)
 				DeviceContext->IASetVertexBuffers(0, 1, &Buffer::Vertex, &Stride, &offset); // set get 구분 버텍스 버퍼는 최대 32개 -> 0~31
 
-				DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+				DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+			}
 
+			{
+#include "Shader/Bytecode/Vertex.h"
+				{
+					D3D11_INPUT_ELEMENT_DESC Descriptor[2] =
+					{
+						D3D11_INPUT_ELEMENT_DESC(),
+						D3D11_INPUT_ELEMENT_DESC(),
+					};
+					Descriptor[0].SemanticName = "POSITION";
+					Descriptor[0].SemanticIndex = 0;
+					Descriptor[0].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+					Descriptor[0].InputSlot = 0;
+					Descriptor[0].AlignedByteOffset = 0;
+					Descriptor[0].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+
+					Descriptor[1].SemanticName = "COLOR";
+					Descriptor[1].SemanticIndex = 0;
+					Descriptor[1].Format = DXGI_FORMAT_R32G32B32A32_FLOAT;
+					Descriptor[1].InputSlot = 0;
+					Descriptor[1].AlignedByteOffset = 16;
+					Descriptor[1].InputSlotClass = D3D11_INPUT_PER_VERTEX_DATA;
+
+					MUST(Device->CreateInputLayout(Descriptor, 2, Bytecode, sizeof(Bytecode), &InputLayout));
+					DeviceContext->IASetInputLayout(InputLayout);
+				}
+				{
+					MUST(Device->CreateVertexShader(Bytecode, sizeof(Bytecode), nullptr, &VertexShader));
+					DeviceContext->VSSetShader(VertexShader, nullptr, 0);
+				}
+			}
+			{
+#include "Shader/Bytecode/Pixel.h"
+				MUST(Device->CreatePixelShader(Bytecode, sizeof(Bytecode), nullptr, &PixelShader));
+				DeviceContext->PSSetShader(PixelShader, nullptr, 0);
 			}
 			return 0;
 		}
@@ -116,15 +153,23 @@ namespace Pipeline
 			//디바이스에서 할 수 있다.
 			//
 			// 버퍼 관리 -> 스왑체인에서 관리하고있음
-			ID3D11Texture2D* texture = nullptr; // 텍스쳐에 있는 아이디 식별번호 외우기 힘드니 따로 만들어준듯
-			MUST(SwapChain->GetBuffer(0, IID_PPV_ARGS(&texture))); //이중버퍼중 백버퍼 먼저쓰니 0 , 텍스쳐에 있는 아이디 식별번호를 파악하여 백버퍼에서 일하게
 			{
-				Device->CreateRenderTargetView(texture, nullptr, &RenderTargetView);
+				D3D11_VIEWPORT Viewport = D3D11_VIEWPORT();
+				Viewport.Width =  LOWORD(lParameter);
+				Viewport.Height = HIWORD(lParameter);
+
+				DeviceContext->RSSetViewports(1, &Viewport);
 			}
-			texture->Release(); // 계속 남아있지 않도록 해제
 
-			DeviceContext->OMSetRenderTargets(1, &RenderTargetView, nullptr); // OM에서 출력하므로 OM사용 , 렌더타겟 1개사용하므로 1 ,  , 3D때배움 깊이자원
-
+			{
+				ID3D11Texture2D* texture = nullptr; // 텍스쳐에 있는 아이디 식별번호 외우기 힘드니 따로 만들어준듯
+				MUST(SwapChain->GetBuffer(0, IID_PPV_ARGS(&texture))); //이중버퍼중 백버퍼 먼저쓰니 0 , 텍스쳐에 있는 아이디 식별번호를 파악하여 백버퍼에서 일하게
+				{
+					Device->CreateRenderTargetView(texture, nullptr, &RenderTargetView);
+				}
+				texture->Release(); // 계속 남아있지 않도록 해제
+				DeviceContext->OMSetRenderTargets(1, &RenderTargetView, nullptr); // OM에서 출력하므로 OM사용 , 렌더타겟 1개사용하므로 1 ,  , 3D때배움 깊이자원
+			}
 			return 0;
 		}
 		case WM_APP:
@@ -148,8 +193,7 @@ namespace Pipeline
 
 
 			DeviceContext->ClearRenderTargetView(RenderTargetView, Color); // 이 색상으로 계속 채워줌 [[안해주면 잔상처럼]]
-
-
+			DeviceContext->Draw(4, 0);
 
 			return 0;
 		}
