@@ -1,6 +1,6 @@
 #include <d3d11.h>
 #include <cassert> // 런타임 도중에 에러를 검출하여 프로그램 폭파시키는 라이브러리
-#pragma comment(lib, "d3d11.lib") // USB느낌 너무 무거워서 .lib로 놓음 ( 누구나 접근하면 안되기도 하고) -> 속성 -> 링커 -> 모든옵션 -> 추가종속성 -> d3d11.lib; 하거나 이거
+//#pragma comment(lib, "d3d11.lib") // USB느낌 너무 무거워서 .lib로 놓음 ( 누구나 접근하면 안되기도 하고) -> 속성 -> 링커 -> 모든옵션 -> 추가종속성 -> d3d11.lib; 하거나 이거
 // 헤더는 솔루션에 외부 종속성에 이미 선언되있고, cpp느낌
 #if not defined _DEBUG
 #define MUST(Expression) (      (         (Expression)))
@@ -27,7 +27,7 @@ namespace Pipeline
 
 		namespace Buffer
 		{
-			ID3D11Buffer* Vertex;
+			ID3D11Buffer* Vertex; // GPU에서 사용할 데이터
 		}
 	}
 
@@ -89,19 +89,20 @@ namespace Pipeline
 					{ { -0.5f ,-0.5f, 0.0f , 1.0f }, { 0.0f , 0.0f, 1.0f , 1.0f } },
 					{ {  0.5f ,-0.5f, 0.0f , 1.0f }, { 1.0f , 1.0f, 1.0f , 1.0f } }  // 좌표계 반시계 안그려줌
 				};
+				// CPU에서 읽을 수 있는 데이터
 
-				D3D11_BUFFER_DESC descriptor = D3D11_BUFFER_DESC();
-				descriptor.ByteWidth = sizeof(Vertecies);
-				descriptor.Usage = D3D11_USAGE_IMMUTABLE;
-				descriptor.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+				D3D11_BUFFER_DESC descriptor = D3D11_BUFFER_DESC(); 
+				descriptor.ByteWidth = sizeof(Vertecies); // 공간설정
+				descriptor.Usage = D3D11_USAGE_IMMUTABLE; // 활용 용도 결정 CPU에 대한 접근 자체를 막아줌 , GPU에서만 읽고 쓸 수 있는 데이터
+				descriptor.BindFlags = D3D11_BIND_VERTEX_BUFFER; // 해당 공간에 대한 식별자를 지정해줌
 				descriptor.CPUAccessFlags = 0; // USAGE의 DYNAMIC == CPU 쓰기가능 읽기X , STAGING 반대 여기서 한번더 CPU 접근맞는지 검사
 
-				D3D11_SUBRESOURCE_DATA subResource = D3D11_SUBRESOURCE_DATA();
-				subResource.pSysMem = Vertecies; // 버퍼라는 공간을 초기화할려고 만들어놓음
-
-				MUST(Device->CreateBuffer(&descriptor, &subResource, &Buffer::Vertex));
-				const UINT Stride = sizeof(Vertex);  // stride 큰걸음
-				const UINT offset = 0; // 처음시작위치?
+				D3D11_SUBRESOURCE_DATA subResource = D3D11_SUBRESOURCE_DATA(); // 버퍼라는 공간을 만들때 초깃값을 설정할 수 있게 도와주는 데이터( GPU관련이기때문에 여기서는 초기화할수없으므로)
+				subResource.pSysMem = Vertecies; // 메모리의 존재하는 시스템메모리는 0과 1로 치환한 후에(비트로 치환되어있으면 어디에서나 공용어이기때문에 컴퓨터입장에서) 그 치환된 걸 그대로 넘겨줌 
+												 // ★ 메모리 주소 자체를 넘겨줌 ★ -> 대신 CPU에서는 읽을 수 없는 메모리
+				MUST(Device->CreateBuffer(&descriptor, &subResource, &Buffer::Vertex)); // &Buffer::Vertex -> GPU에서만 사용가능해서 여기서 설정하면 오류 -> 설정할 수 있는게 없다.
+				const UINT Stride = sizeof(Vertex);  // stride 큰걸음 GPU에 좌표값을 비트로 치환해서 보내주긴 했는데, 얼만큼 끊어 읽어야 되는지 모름 , 그래서 어디서 끊어야 되는지 알려줌
+				const UINT offset = 0; // 어디서부터 읽어야되나 -> 처음부터라서 0 (처음시작위치 알려주는중)
 				DeviceContext->IASetVertexBuffers(0, 1, &Buffer::Vertex, &Stride, &offset); // set get 구분 버텍스 버퍼는 최대 32개 -> 0~31
 
 				DeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);

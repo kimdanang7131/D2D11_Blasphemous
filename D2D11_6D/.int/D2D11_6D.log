@@ -2,6 +2,4 @@
 C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Microsoft\VC\v160\Microsoft.CppBuild.targets(499,5): warning MSB8004: Output 디렉터리가 슬래시로 끝나지 않습니다. Output 디렉터리의 적절한 평가를 허용하는 데 필요하므로 이 빌드 인스턴스에서 슬래시를 추가합니다.
   Pipeline.cpp
 C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\D2D11_6D\Pipeline.cpp(1,1): warning C4819: 현재 코드 페이지(949)에서 표시할 수 없는 문자가 파일에 들어 있습니다. 데이터가 손실되지 않게 하려면 해당 파일을 유니코드 형식으로 저장하십시오.
-  WinApi.cpp
-  코드를 생성하고 있습니다...
   D2D11_6D.vcxproj -> C:\Users\Administrator\Desktop\D2D11_Blasphemous\D2D11_6D\.out\D2D11_6D.exe
